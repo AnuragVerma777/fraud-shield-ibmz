@@ -1,0 +1,45 @@
+{
+  "split": "60/20/20 (train/val/test)",
+  "evaluated_on": "test",
+  "threshold": 0.5,
+  "xgboost_scale_pos_weight": 578.264406779661,
+  "train_rows": 170883,
+  "val_rows": 56962,
+  "test_rows": 56962,
+  "models": {
+    "logistic_regression": {
+      "precision": 0.06130790190735695,
+      "recall": 0.9183673469387755,
+      "f1": 0.11494252873563218,
+      "roc_auc": 0.9725846954566858,
+      "pr_auc": 0.7208653944404225,
+      "confusion_matrix": [
+        [
+          55486,
+          1378
+        ],
+        [
+          8,
+          90
+        ]
+      ]
+    },
+    "xgboost": {
+      "precision": 0.8817204301075269,
+      "recall": 0.8367346938775511,
+      "f1": 0.8586387434554974,
+      "roc_auc": 0.9761881732856339,
+      "pr_auc": 0.8795810325277473,
+      "confusion_matrix": [
+        [
+          56853,
+          11
+        ],
+        [
+          16,
+          82
+        ]
+      ]
+    }
+  }
+}

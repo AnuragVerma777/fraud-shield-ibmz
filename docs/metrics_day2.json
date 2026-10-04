@@ -1,0 +1,66 @@
+{
+  "evaluated_on": "held-out test set",
+  "test_rows": 56962,
+  "risk_config": {
+    "w_xgb": 1.0,
+    "w_anom": 0.0,
+    "flag_threshold": 9.384783083987713e-06,
+    "block_threshold": 46.683236956596375,
+    "validation_pr_auc": 0.8260947427398498,
+    "source": "C:\\Users\\anurag\\PROJECTS\\IBM DATATHON\\models\\risk_config.json"
+  },
+  "ranking_metrics": {
+    "xgboost_alone": {
+      "pr_auc": 0.8795810325277473,
+      "roc_auc": 0.9761881732856339
+    },
+    "combined_risk": {
+      "pr_auc": 0.8795810325277473,
+      "roc_auc": 0.9761881732856339
+    },
+    "combined_minus_xgboost": {
+      "pr_auc_delta_combined_minus_xgboost": 0.0,
+      "roc_auc_delta_combined_minus_xgboost": 0.0
+    },
+    "combined_better_on_both_auc_metrics": false
+  },
+  "three_decision_confusion_matrix": {
+    "actual_labels": [
+      "Genuine",
+      "Fraud"
+    ],
+    "predicted_decisions": [
+      "APPROVE",
+      "FLAG",
+      "BLOCK"
+    ],
+    "counts": [
+      [
+        3,
+        56850,
+        11
+      ],
+      [
+        0,
+        16,
+        82
+      ]
+    ]
+  },
+  "outcomes": {
+    "fraud_caught_block": 82,
+    "fraud_caught_flag": 16,
+    "fraud_caught_block_plus_flag": 98,
+    "fraud_missed_approved": 0,
+    "genuine_customers_blocked": 11,
+    "genuine_customers_flagged": 56850,
+    "genuine_customers_approved": 3
+  },
+  "latency_ms_per_transaction": {
+    "average": 16.142066,
+    "p95": 23.6973,
+    "measurements": 1000,
+    "measurement_method": "individual RiskEngine calls on an evenly spaced test-set sample"
+  },
+  "anomaly_value_note": "Anomaly detection can surface transactions that differ from known legitimate behavior, including patterns not represented in the supervised model's fraud examples; this is a complementary signal, not proof that unseen fraud was caught in this test."
+}
