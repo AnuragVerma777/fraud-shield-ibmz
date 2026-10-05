@@ -1,0 +1,23 @@
+{
+  "comparison": "batch test evaluation vs simulated real-time stream",
+  "machine": "local laptop",
+  "dataset": "ULB credit card fraud dataset held-out test split",
+  "batch": {
+    "transactions_scored": 56962,
+    "latency_measurements": 1000,
+    "latency_method": "individual RiskEngine calls on an evenly spaced test-set sample, as recorded by docs/metrics_day2.json",
+    "average_latency_ms": 23.069688000000003,
+    "p95_latency_ms": 28.832599999999996,
+    "xgboost_pr_auc": 0.8795810325277473,
+    "xgboost_roc_auc": 0.9761881732856339
+  },
+  "real_time_stream": {
+    "transactions_scored": 20,
+    "latency_measurements": 20,
+    "latency_method": "per-transaction latency_ms values in data/stream_log.csv",
+    "configured_transactions_per_second": 20,
+    "average_latency_ms": 27.33945,
+    "p95_latency_ms": 28.463
+  },
+  "caveat": "The stream replay is a small sample from the same held-out test data. Latency values are local laptop measurements and are not a production benchmark."
+}

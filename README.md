@@ -127,11 +127,58 @@ in the current combined score.
 
 The policy caught 98 fraud cases through BLOCK or FLAG and approved none of
 the fraud cases. It incorrectly blocked 11 genuine customers and flagged
-56,850 genuine transactions. Scoring latency was **16.142 ms average** and
-**23.697 ms at p95**, measured from 1,000 individual RiskEngine calls sampled
-across the test set. Detailed numbers are in `docs/metrics_day2.json`;
+56,850 genuine transactions. The latest evaluation measured **23.070 ms
+average** and **28.833 ms at p95**, from 1,000 individual RiskEngine calls
+sampled across the test set. Detailed numbers are in `docs/metrics_day2.json`;
 charts are `docs/day2_model_comparison.png` and
 `docs/day2_decision_matrix.png`.
+
+## Day 3: stream simulation and alerts
+
+Run the in-memory stream simulation after completing the Day 1 training and
+Day 2 risk tuning steps (so the model, scaler, Isolation Forest, and tuned
+configuration are available):
+
+```powershell
+python -m src.stream --max-events 2000 --tps 20 --reset-log
+```
+
+The consumer appends every scored event to `data/stream_log.csv`. For each
+`FLAG` or `BLOCK`, it also appends an alert to `data/alerts.csv` with an ID,
+transaction ID, severity, risk score, raw amount, rule-based reason, and UTC
+timestamp. Example reasons include unusually large amounts, a high anomaly
+score, or a fraud probability above 0.9. Approved transactions do not create
+alerts. These are simple rules for now; SHAP explanations are planned for a
+later day.
+
+### Batch evaluation vs stream replay
+
+The held-out batch evaluation scores all 56,962 test transactions and reports
+PR-AUC 0.8796 and ROC-AUC 0.9762 for XGBoost. Its latency summary is based on
+1,000 individual RiskEngine calls sampled from that test set. The stream replay
+logged 20 events at the configured 20 transactions per second; its latency
+summary uses those 20 per-event measurements. Both paths averaged about
+23–27 ms per transaction on this laptop. The stream sample is small and both
+measurements use the same held-out test data, so treat this as a local pipeline
+comparison rather than an independent production benchmark.
+
+| Mode | Transactions scored | Latency sample | Average latency | P95 latency | Result |
+|---|---:|---:|---:|---:|---|
+| Batch test evaluation | 56,962 | 1,000 individual calls | 23.070 ms | 28.833 ms | PR-AUC 0.8796; ROC-AUC 0.9762 |
+| Real-time stream replay | 20 | 20 stream events | 27.339 ms | 28.463 ms | 20 events logged; paced at 20 TPS |
+
+The plotted values and source counts are recorded in `docs/benchmark.json`.
+
+![Batch evaluation and real-time stream latency comparison](docs/batch_vs_realtime.svg)
+
+### Limitations
+
+- The model uses a public, historical credit-card dataset; it may not reflect
+  current fraud patterns or a particular bank's customers.
+- The stream is simulated in process with a Python queue, not connected to a
+  live payment feed or production message broker.
+- Latency numbers come from this laptop and small local samples; production
+  hardware, traffic, and deployment conditions will change them.
 
 ## Project structure
 
@@ -140,7 +187,7 @@ charts are `docs/day2_model_comparison.png` and
 ├── docs/          Metrics and generated plots
 ├── models/        Saved model and scaler artifacts
 ├── notebooks/     Exploration notebooks
-├── src/           Data preparation, training, and threshold analysis
+├── src/           Data prep, model scoring, streaming, and alert generation
 └── tests/         Data pipeline tests
 ```
 
