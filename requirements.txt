@@ -1,0 +1,15 @@
+# Fraud Shield on IBM Z — Dependencies
+# Install:  pip install -r requirements.txt
+
+pandas
+numpy
+scikit-learn
+xgboost
+imbalanced-learn
+shap
+streamlit
+plotly
+joblib
+matplotlib
+seaborn
+jupyter

@@ -1,0 +1,28 @@
+# ──────────────────────────────────────────
+# Fraud Shield on IBM Z — .gitignore
+# ──────────────────────────────────────────
+
+# Dataset files (too large for git)
+data/*.csv
+
+# Trained model artifacts
+models/
+
+# Virtual environment
+venv/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

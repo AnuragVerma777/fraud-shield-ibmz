@@ -57,8 +57,8 @@
     "genuine_customers_approved": 3
   },
   "latency_ms_per_transaction": {
-    "average": 16.142066,
-    "p95": 23.6973,
+    "average": 23.069688000000003,
+    "p95": 28.832599999999996,
     "measurements": 1000,
     "measurement_method": "individual RiskEngine calls on an evenly spaced test-set sample"
   },
