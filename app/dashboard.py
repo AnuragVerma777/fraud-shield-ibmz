@@ -6,10 +6,19 @@ Run from the repository root with ``streamlit run app/dashboard.py``.
 import json
 import math
 import os
+from pathlib import Path
+import sys
 
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+
+# Streamlit may put app/ rather than the repository root on sys.path when it
+# executes this file directly. Add the project root so app.* and src.* imports
+# work consistently from the dashboard launch command.
+PROJECT_ROOT = str(Path(__file__).resolve().parents[1])
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
 from app.data_access import (
     compute_kpis,
@@ -52,14 +61,27 @@ st.markdown(
         background: transparent; border: 0; padding: 0.25rem 0.2rem;
       }
       [data-testid="stMetricLabel"] { color: #AAB3C2; }
+      [data-testid="stTabs"] [data-baseweb="tab-list"] {
+        gap: 0.35rem; overflow-x: auto; flex-wrap: nowrap; margin-top: 0.45rem;
+      }
+      [data-testid="stTabs"] [data-baseweb="tab"] {
+        color: #DCE3EC; white-space: nowrap; flex: 0 0 auto;
+        padding-left: 0.9rem; padding-right: 0.9rem;
+      }
+      [data-testid="stTabs"] [aria-selected="true"] { color: #2ECC71; }
       @media (max-width: 768px) {
         .block-container { padding-left: 0.8rem; padding-right: 0.8rem; }
-        [data-testid="stHorizontalBlock"] {
+        [data-testid="stHorizontalBlock"]:has(> [data-testid="stColumn"]) {
           flex-direction: column !important; gap: 0.65rem !important;
         }
-        [data-testid="stColumn"] {
+        [data-testid="stHorizontalBlock"]:has(> [data-testid="stColumn"]) > [data-testid="stColumn"] {
           width: 100% !important; flex: 1 1 100% !important; min-width: 100% !important;
         }
+        [data-testid="stTabs"] [data-baseweb="tab-list"] {
+          flex-direction: row !important; overflow-x: auto !important;
+          flex-wrap: nowrap !important; width: 100%;
+        }
+        [data-testid="stTabs"] [data-baseweb="tab"] { flex: 0 0 auto !important; }
         h1 { font-size: 1.7rem !important; }
         [data-testid="stMetricValue"] { font-size: 1.35rem !important; }
       }
@@ -734,15 +756,20 @@ def main() -> None:
 
         st.divider()
         st.caption("The stream replays held-out test transactions in chronological order.")
+        st.divider()
+        st.subheader("Dashboard")
+        selected_page = st.radio(
+            "Dashboard page",
+            ["Live Monitor", "Impact", "IBM Z Deployment"],
+            key="dashboard_page",
+            label_visibility="collapsed",
+        )
 
-    live_tab, impact_tab, deployment_tab = st.tabs(
-        ["Live Monitor", "Impact", "IBM Z Deployment"]
-    )
-    with live_tab:
+    if selected_page == "Live Monitor":
         _live_fragment()
-    with impact_tab:
+    elif selected_page == "Impact":
         _render_impact_tab()
-    with deployment_tab:
+    else:
         _render_ibm_z_tab()
 
     st.divider()
