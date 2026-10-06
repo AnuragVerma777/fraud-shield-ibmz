@@ -247,6 +247,4 @@ Python · pandas · NumPy · scikit-learn · XGBoost · SHAP · Streamlit · Plo
 └── tests/         Data pipeline tests
 ```
 
-## License
 
-MIT
