@@ -1,0 +1,11 @@
+{
+  "w_xgb": 1.0,
+  "w_anom": 0.0,
+  "flag_threshold": 9.384783083987713e-06,
+  "block_threshold": 46.683236956596375,
+  "validation_pr_auc": 0.8260947427398498,
+  "threshold_targets": {
+    "block_precision": 0.9,
+    "flag_recall": 0.85
+  }
+}

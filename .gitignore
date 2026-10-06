@@ -5,9 +5,6 @@
 # Dataset files (too large for git)
 data/*.csv
 
-# Trained model artifacts
-models/
-
 # Virtual environment
 venv/
 
