@@ -9,6 +9,7 @@ imbalanced-learn
 shap
 streamlit
 plotly
+graphviz
 joblib
 matplotlib
 seaborn

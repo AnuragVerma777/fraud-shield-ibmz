@@ -43,10 +43,13 @@ PR_CURVE_PATH       = os.path.join(DOCS_DIR, "pr_curve.png")
 CM_PLOT_PATH        = os.path.join(DOCS_DIR, "confusion_matrix.png")
 METRICS_PATH        = os.path.join(DOCS_DIR, "metrics_day1.json")
 METRICS_DAY2_PATH   = os.path.join(DOCS_DIR, "metrics_day2.json")
+BENCHMARK_PATH      = os.path.join(DOCS_DIR, "benchmark.json")
+BATCH_VS_REALTIME_PATH = os.path.join(DOCS_DIR, "batch_vs_realtime.json")
 THRESHOLD_PLOT_PATH = os.path.join(DOCS_DIR, "threshold_tradeoff.png")
 RISK_THRESHOLD_PLOT_PATH = os.path.join(DOCS_DIR, "risk_threshold_tradeoff.png")
 DAY2_PERFORMANCE_PLOT_PATH = os.path.join(DOCS_DIR, "day2_model_comparison.png")
 DAY2_DECISION_PLOT_PATH = os.path.join(DOCS_DIR, "day2_decision_matrix.png")
+SHAP_SUMMARY_PLOT_PATH = os.path.join(DOCS_DIR, "shap_summary.png")
 
 # ──────────────────────────────────────────────
 # 4. REPRODUCIBILITY

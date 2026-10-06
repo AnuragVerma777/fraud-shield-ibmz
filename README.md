@@ -148,8 +148,8 @@ The consumer appends every scored event to `data/stream_log.csv`. For each
 transaction ID, severity, risk score, raw amount, rule-based reason, and UTC
 timestamp. Example reasons include unusually large amounts, a high anomaly
 score, or a fraud probability above 0.9. Approved transactions do not create
-alerts. These are simple rules for now; SHAP explanations are planned for a
-later day.
+alerts. These are simple rules for stream alerts; selected alerts can also be
+explained with SHAP in the Day 4 dashboard.
 
 ### Batch evaluation vs stream replay
 
@@ -180,20 +180,72 @@ The plotted values and source counts are recorded in `docs/benchmark.json`.
 - Latency numbers come from this laptop and small local samples; production
   hardware, traffic, and deployment conditions will change them.
 
+## Day 4: Streamlit dashboard and SHAP explanations
+
+After completing model training and risk tuning, launch the dashboard from the
+repository root:
+
+```powershell
+streamlit run app/dashboard.py
+```
+
+The dashboard opens in your browser and refreshes live panels once per second.
+Use the sidebar to start or stop the stream, choose its speed and event limit,
+or reset the stream and alert logs. It reads `data/stream_log.csv` and
+`data/alerts.csv` created by the Day 3 simulation.
+
+### Dashboard tabs
+
+- **Live Monitor** — shows stream status, transaction KPIs, risk scores against
+  the configured FLAG/BLOCK thresholds, recent color-coded decisions, and the
+  latest alerts. Select a FLAG or BLOCK alert under **Why was this flagged?**
+  to see its transaction scores, latency, top five SHAP contributions, and a
+  plain-language explanation. SHAP runs only for the selected transaction.
+- **Impact** — displays batch and stream benchmark numbers and Day 2 test
+  outcomes. The saved-versus-lost amount chart reads `docs/batch_vs_realtime.json`;
+  that file is not currently present, so the dashboard shows a no-data message
+  until amount-based impact results are added. It does not infer monetary
+  values from fraud counts alone.
+- **IBM Z Deployment** — shows the target payment-to-analyst scoring flow and
+  explains the low-latency, security, scale, and network-hop goals. The diagram
+  is a target architecture; this project currently simulates scoring locally
+  in Python.
+
+To generate the global SHAP summary plot from a reproducible sample of up to
+2,000 validation transactions, run:
+
+```powershell
+python -m src.explain
+```
+
+The plot is saved to `docs/shap_summary.png`. Individual SHAP explanations are
+calculated on demand in the Live Monitor tab.
+
+### Screenshot placeholders
+
+Add dashboard captures to `docs/screenshots/` using these filenames:
+
+| Tab | Screenshot placeholder |
+|---|---|
+| Live Monitor | `docs/screenshots/live_monitor.png` |
+| Impact | `docs/screenshots/impact.png` |
+| IBM Z Deployment | `docs/screenshots/ibm_z_deployment.png` |
+
+## Tech stack
+
+Python · pandas · NumPy · scikit-learn · XGBoost · SHAP · Streamlit · Plotly · Graphviz · joblib · Matplotlib
+
 ## Project structure
 
 ```text
 ├── data/          Dataset files (download separately)
+├── app/           Streamlit dashboard and data/process helpers
 ├── docs/          Metrics and generated plots
 ├── models/        Saved model and scaler artifacts
 ├── notebooks/     Exploration notebooks
 ├── src/           Data prep, model scoring, streaming, and alert generation
 └── tests/         Data pipeline tests
 ```
-
-## Tech stack
-
-Python · pandas · NumPy · scikit-learn · XGBoost · joblib · Matplotlib
 
 ## License
 
